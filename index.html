@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PWA 入力アプリ</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>データ入力</h1>
+    <input type="text" id="name" placeholder="名前を入力">
+    <input type="text" id="message" placeholder="メッセージを入力">
+    <button id="sendBtn">スプレッドシートに送信</button>
+
+    <script src="main.js"></script>
+</body>
+</html>
