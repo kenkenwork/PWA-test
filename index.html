@@ -29,6 +29,7 @@
             if (currentToken) {
                 console.log('あなたのトークン（住所）はこれです：');
                 console.log(currentToken);
+                document.body.innerHTML += `<h2>トークン取得成功！</h2><textarea style="width:100%;height:100px;">${currentToken}</textarea>`;
             } else {
                 console.log('通知の許可が必要です');
             }
