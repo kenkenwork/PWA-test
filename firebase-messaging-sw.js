@@ -11,4 +11,4 @@ importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compa
   };
 
 firebase.initializeApp(firebaseConfig);
-const messaging = firebase.messaging();
+firebase.messaging();
