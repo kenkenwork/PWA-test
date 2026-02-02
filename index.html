@@ -1,22 +1,40 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA 入力アプリ</title>
-    <link rel="manifest" href="manifest.json">
-    <style>
-        body { font-family: sans-serif; padding: 20px; }
-        input { display: block; width: 100%; margin-bottom: 10px; padding: 8px; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; }
-    </style>
+    <meta charset="utf-8">
+    <title>FCM Test</title>
 </head>
 <body>
-    <h1>データ入力</h1>
-    <input type="text" id="name" placeholder="名前を入力">
-    <input type="text" id="message" placeholder="メッセージを入力">
-    <button id="sendBtn">スプレッドシートに送信</button>
+    <h1>FCM通知テスト</h1>
+    <p>コンソール（F12）を見て、トークンをコピーしてください。</p>
 
-    <script src="main.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
+
+    <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBNdUCOex6fVdBBfiMXyWhJtmVFwcf_Tdo",
+    authDomain: "pwa-push-test-2283d.firebaseapp.com",
+    projectId: "pwa-push-test-2283d",
+    storageBucket: "pwa-push-test-2283d.firebasestorage.app",
+    messagingSenderId: "861182613182",
+    appId: "1:861182613182:web:ba7b947993fa3c0610f0ef"
+  };
+
+        firebase.initializeApp(firebaseConfig);
+        const messaging = firebase.messaging();
+
+        // 通知の許可を得て、トークン（住所）を取得
+        messaging.getToken({ vapidKey: 'BClfbibGWlmHr1ipHag-A74Zlo3upeEsYiz-IHHTMdPCASvy-ld9VQ8aOqQz1FxjH-uNeEAc-YCq1b36IK1khxE' }).then((currentToken) => {
+            if (currentToken) {
+                console.log('あなたのトークン（住所）はこれです：');
+                console.log(currentToken);
+            } else {
+                console.log('通知の許可が必要です');
+            }
+        }).catch((err) => {
+            console.log('エラーが発生しました', err);
+        });
+    </script>
 </body>
 </html>
