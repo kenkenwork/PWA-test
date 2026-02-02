@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-    <meta charset="utf-8">
-    <title>FCM Test</title>
+  <meta charset="utf-8" />
+  <title>FCM Test</title>
 </head>
 <body>
-    <h1>FCM通知テスト</h1>
-    <p>コンソール（F12）を見て、トークンをコピーしてください。</p>
+  <h1>FCM通知テスト</h1>
+  <button id="btn">通知トークンを取得</button>
+  <pre id="log"></pre>
 
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
+  <!-- Firebase SDK（compat） -->
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js"></script>
 
-    <script>
+  <script>
   const firebaseConfig = {
     apiKey: "AIzaSyBNdUCOex6fVdBBfiMXyWhJtmVFwcf_Tdo",
     authDomain: "pwa-push-test-2283d.firebaseapp.com",
@@ -21,21 +23,46 @@
     appId: "1:861182613182:web:ba7b947993fa3c0610f0ef"
   };
 
-        firebase.initializeApp(firebaseConfig);
-        const messaging = firebase.messaging();
+    firebase.initializeApp(firebaseConfig);
+    const messaging = firebase.messaging();
 
-        // 通知の許可を得て、トークン（住所）を取得
-        messaging.getToken({ vapidKey: 'BClfbibGWlmHr1ipHag-A74Zlo3upeEsYiz-IHHTMdPCASvy-ld9VQ8aOqQz1FxjH-uNeEAc-YCq1b36IK1khxE' }).then((currentToken) => {
-            if (currentToken) {
-                console.log('あなたのトークン（住所）はこれです：');
-                console.log(currentToken);
-                document.body.innerHTML += `<h2>トークン取得成功！</h2><textarea style="width:100%;height:100px;">${currentToken}</textarea>`;
-            } else {
-                console.log('通知の許可が必要です');
-            }
-        }).catch((err) => {
-            console.log('エラーが発生しました', err);
+    const log = (msg) => {
+      console.log(msg);
+      document.getElementById("log").textContent += msg + "\n";
+    };
+
+    document.getElementById("btn").addEventListener("click", async () => {
+      try {
+        // ① 通知の許可（ユーザー操作必須）
+        const permission = await Notification.requestPermission();
+        if (permission !== "granted") {
+          log("❌ 通知が許可されませんでした");
+          return;
+        }
+
+        // ② Service Worker 登録
+        const registration = await navigator.serviceWorker.register(
+          "/firebase-messaging-sw.js"
+        );
+        log("✅ Service Worker 登録完了");
+
+        // ③ トークン取得
+        const token = await messaging.getToken({
+          vapidKey: "BClfbibGWlmHr1ipHag-A74Zlo3upeEsYiz-IHHTMdPCASvy-ld9VQ8aOqQz1FxjH-uNeEAc-YCq1b36IK1khxE",
+          serviceWorkerRegistration: registration,
         });
-    </script>
+
+        if (token) {
+          log("🎉 トークン取得成功！");
+          log(token);
+        } else {
+          log("⚠️ トークンが取得できませんでした");
+        }
+      } catch (err) {
+        log("🔥 エラー発生");
+        log(err.message || err);
+      }
+    });
+  </script>
 </body>
 </html>
